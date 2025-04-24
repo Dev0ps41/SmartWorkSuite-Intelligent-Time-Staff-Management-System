@@ -1,0 +1,166 @@
+﻿<UserControl x:Class="EmployerTimeManagement.Controls.E2Control.E2Control"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:conv="clr-namespace:EmployerTimeManagement.Converters"
+             Background="#1C1F26"
+             FontFamily="Segoe UI"
+             FontSize="14">
+
+    <UserControl.Resources>
+        <conv:BooleanToSentStatusConverter x:Key="BooleanToSentStatusConverter"/>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Φόρμα προσθήκης σύμβασης -->
+        <Border Grid.Row="0" Background="White" CornerRadius="10" Padding="20" Margin="0,0,0,10" BorderBrush="#DDD" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <!-- ΑΦΜ -->
+                    <ColumnDefinition Width="150"/>
+                    <!-- Ονοματεπώνυμο -->
+                    <ColumnDefinition Width="130"/>
+                    <!-- Έναρξη -->
+                    <ColumnDefinition Width="130"/>
+                    <!-- Λήξη -->
+                    <ColumnDefinition Width="150"/>
+                    <!-- Ειδικότητα -->
+                    <ColumnDefinition Width="150"/>
+                    <!-- Σχολή -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- Κουμπιά -->
+                </Grid.ColumnDefinitions>
+
+                <TextBox x:Name="txtAfm"
+                 Grid.Column="0"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                 Background="White"
+                 Foreground="Black"
+                 Margin="0,0,10,0"
+                 materialDesign:HintAssist.Hint="ΑΦΜ" />
+
+                <TextBox x:Name="txtFullName"
+                 Grid.Column="1"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                 Background="White"
+                 Foreground="Black"
+                 Margin="0,0,10,0"
+                 materialDesign:HintAssist.Hint="Ονοματεπώνυμο" />
+
+                <DatePicker x:Name="dpStartDate"
+                    Grid.Column="2"
+                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                    Background="White"
+                    Foreground="Black"
+                    Margin="0,0,10,0"
+                    materialDesign:HintAssist.Hint="Ημ. Έναρξης" />
+
+                <DatePicker x:Name="dpEndDate"
+                    Grid.Column="3"
+                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                    Background="White"
+                    Foreground="Black"
+                    Margin="0,0,10,0"
+                    materialDesign:HintAssist.Hint="Ημ. Λήξης" />
+
+                <TextBox x:Name="txtSpecialty"
+                 Grid.Column="4"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                 Background="White"
+                 Foreground="Black"
+                 Margin="0,0,10,0"
+                 materialDesign:HintAssist.Hint="Ειδικότητα" />
+
+                <TextBox x:Name="txtSchool"
+                 Grid.Column="5"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                 Background="White"
+                 Foreground="Black"
+                 Margin="0,0,10,0"
+                 materialDesign:HintAssist.Hint="Σχολή" />
+
+                <StackPanel Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="➕ Προσθήκη"
+            Margin="0,0,10,0"
+            Click="AddContract_Click"
+            Height="40"
+            MinWidth="120"
+            Padding="20,5"
+            Background="#2196F3"
+            Foreground="White"
+            Style="{StaticResource MaterialDesignRaisedButton}" />
+
+                    <Button Content="🗑️ Διαγραφή"
+            Click="DeleteSelectedEntry_Click"
+            Height="40"
+            MinWidth="150"
+            Padding="20,5"
+            Background="#F44336"
+            Foreground="White"
+            Style="{StaticResource MaterialDesignRaisedButton}" />
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+
+        <!-- Πίνακας συμβάσεων -->
+        <Border Grid.Row="1" Background="White" CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <DataGrid x:Name="e2Grid"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True"
+                          Background="White"
+                          Foreground="Black"
+                          HeadersVisibility="Column"
+                          AlternatingRowBackground="#FAFAFA"
+                          BorderThickness="0"
+                          GridLinesVisibility="Horizontal"
+                          HorizontalGridLinesBrush="#DDD"
+                          VerticalGridLinesBrush="#DDD"
+                          RowHeight="36"
+                          FontSize="14">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Padding" Value="8,4"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ΑΦΜ" Binding="{Binding AFM}" Width="100"/>
+                        <DataGridTextColumn Header="Ονοματεπώνυμο" Binding="{Binding FullName}" Width="150"/>
+                        <DataGridTextColumn Header="Έναρξη" Binding="{Binding StartDate, StringFormat=dd/MM/yyyy}" Width="100"/>
+                        <DataGridTextColumn Header="Λήξη" Binding="{Binding EndDate, StringFormat=dd/MM/yyyy}" Width="100"/>
+                        <DataGridTextColumn Header="Ειδικότητα" Binding="{Binding Specialty}" Width="150"/>
+                        <DataGridTextColumn Header="Σχολή" Binding="{Binding School}" Width="150"/>
+                        <DataGridTextColumn Header="Κατάσταση"
+                            Binding="{Binding IsSent, Converter={StaticResource BooleanToSentStatusConverter}}"
+                            Width="100"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Κουμπί Υποβολής -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="📤 Υποβολή στο ΕΡΓΑΝΗ"
+                    Click="SubmitE2_Click"
+                    Height="44"
+                    FontSize="16"
+                    Padding="20,5"
+                    Background="#4CAF50"
+                    Foreground="White"
+                    Style="{StaticResource MaterialDesignRaisedButton}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

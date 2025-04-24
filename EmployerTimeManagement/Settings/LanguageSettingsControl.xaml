@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="EmployerTimeManagement.Settings.LanguageSettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="Auto" Width="Auto"
+             Background="#1C1F26"
+             FontFamily="Segoe UI" FontSize="14">
+
+    <Grid Background="#1C1F26" Margin="20">
+        <Border Background="White"
+                CornerRadius="10"
+                Padding="30"
+                BorderBrush="#DDD"
+                BorderThickness="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+
+            <StackPanel Width="280" HorizontalAlignment="Center">
+
+                <TextBlock Text="🌐 Επιλογή Γλώσσας"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="Black"
+                           Margin="0 0 0 20"
+                           HorizontalAlignment="Center"/>
+
+                <ComboBox x:Name="languageCombo"
+                          Width="200"
+                          Background="White"
+                          Foreground="Black"
+                          Margin="0 0 0 20"
+                          HorizontalAlignment="Center"
+                          SelectedIndex="0">
+                    <ComboBoxItem Content="Ελληνικά"/>
+                    <ComboBoxItem Content="English"/>
+                    
+                </ComboBox>
+
+                <Button Content="💾 Αποθήκευση"
+                        Width="160"
+                        Height="40"
+                        Background="#2ECC71"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        BorderBrush="Transparent"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

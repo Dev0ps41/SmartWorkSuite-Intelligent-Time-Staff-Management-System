@@ -1,0 +1,172 @@
+﻿<UserControl x:Class="EmployerTimeManagement.DashboardControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="800"
+             Background="#1C1F26">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ΣΤΑΤΙΣΤΙΚΑ -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,20">
+
+            <!-- Υπάλληλοι -->
+            <Border Background="#1976D2" CornerRadius="10" Padding="20" Margin="0,0,20,0" Width="200">
+                <StackPanel>
+                    <TextBlock Text="👤 Υπάλληλοι" Foreground="White" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock x:Name="EmployeeCountText" Text="0" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,10,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Ώρες -->
+            <Border Background="#2D3E40" CornerRadius="10" Padding="20" Margin="0,0,20,0" Width="200">
+                <StackPanel>
+                    <TextBlock Text="Ώρες Εργασίας" FontSize="16" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock x:Name="totalHoursText" Text="0 ώρες" FontSize="28" FontWeight="Bold" Foreground="LightGreen" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ΕΡΓΑΝΗ -->
+            <Border x:Name="ErganiStatusBorder" Background="DarkRed" CornerRadius="10" Padding="20" Margin="0,0,20,0" Width="250">
+                <StackPanel>
+                    <TextBlock Text="Κατάσταση ΕΡΓΑΝΗ" FontSize="16" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock x:Name="ErganiStatusText" Text="Μη συνδεδεμένο" FontSize="20" FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Επιτυχημένες Αποστολές -->
+            <Border x:Name="ErganiSubmissionBorder" Background="ForestGreen" CornerRadius="10" Padding="20" Width="250">
+                <StackPanel>
+                    <TextBlock Text="Αποστολές ΕΡΓΑΝΗ" FontSize="16" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock x:Name="ErganiSubmissionText" Text="Επιτυχίες: 0" FontSize="20" FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Αποτυχημένες Αποστολές -->
+            <Border x:Name="FailedSubmissionBorder"
+        Background="Goldenrod"
+        CornerRadius="10"
+        Width="250"
+        Height="150"
+        Margin="0,0,0,0"
+        Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Τίτλοι -->
+                    <StackPanel Grid.Row="0" VerticalAlignment="Top" Margin="10,10,10,0">
+                        <TextBlock Text="Αποτυχημένες Αποστολές"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       Foreground="White"/>
+                        <TextBlock x:Name="FailedSubmissionText"
+                       Text="Αποτυχημένες: 0"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       Margin="0,5,0,0"/>
+                    </StackPanel>
+
+                    <!-- Κεντραρισμένο Κουμπί -->
+                    <Button Grid.Row="1"
+                Content="👁 Προβολή"
+                Width="120"
+                Height="36"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Click="ViewSubmissionHistory_Click"
+                Background="White"
+                Foreground="Black"
+                FontWeight="Bold"
+                BorderThickness="0"
+                Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                                        CornerRadius="6"
+                                        Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#f0f0f0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Border>
+
+        </StackPanel>
+
+        <!-- ΓΡΑΦΗΜΑ -->
+        <Border Grid.Row="1" Background="White" CornerRadius="10" Padding="15" Margin="0,0,0,20" BorderBrush="#DDD" BorderThickness="1">
+            <StackPanel>
+                <TextBlock Text="📈 Ώρες ανά Ημέρα" FontSize="18" FontWeight="Bold" Foreground="Black" Margin="0,0,0,10"/>
+                <lvc:CartesianChart Series="{Binding Series}" XAxes="{Binding XAxes}" YAxes="{Binding YAxes}" Height="250" Foreground="Black"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ΠΙΝΑΚΑΣ ΣΗΜΕΡΙΝΩΝ -->
+        <Border Grid.Row="2" Background="White" CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+            <StackPanel>
+                <TextBlock Text="📅 Σημερινές Καταχωρίσεις" FontSize="18" FontWeight="Bold" Foreground="Black" Margin="0,0,0,10"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="220">
+                    <DataGrid x:Name="todayGrid"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              Background="White"
+                              Foreground="Black"
+                              AlternatingRowBackground="#FAFAFA"
+                              HorizontalGridLinesBrush="#DDD"
+                              VerticalGridLinesBrush="#DDD"
+                              ColumnHeaderHeight="36"
+                              RowHeight="36"
+                              FontSize="14"
+                              BorderThickness="0">
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Padding" Value="6"/>
+                            </Style>
+                        </DataGrid.Resources>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
+                            <DataGridTextColumn Header="ΑΦΜ" Binding="{Binding AFM}" Width="100"/>
+                            <DataGridTextColumn Header="Όνομα" Binding="{Binding FirstName}" Width="*"/>
+                            <DataGridTextColumn Header="Επώνυμο" Binding="{Binding LastName}" Width="*"/>
+                            <DataGridTextColumn Header="Ημερ. Εργασίας" Binding="{Binding Date, StringFormat=dd/MM/yyyy}" Width="120"/>
+                            <DataGridTextColumn Header="Ώρα Εισόδου" Binding="{Binding EntryTime}" Width="90"/>
+                            <DataGridTextColumn Header="Ώρα Εξόδου" Binding="{Binding ExitTime}" Width="90"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

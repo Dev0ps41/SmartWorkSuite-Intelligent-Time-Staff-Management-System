@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="EmployerTimeManagement.Ergani.ErganiControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:EmployerTimeManagement.Ergani"
+             xmlns:models="clr-namespace:EmployerTimeManagement.Models"
+             Background="#1C1F26"
+             FontFamily="Segoe UI"
+             FontSize="14">
+
+    <UserControl.Resources>
+        <local:LiveErganiConverter x:Key="LiveErganiConverter"/>
+        <Style x:Key="FancyToggleButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="SwitchBorder" CornerRadius="15" Background="Gray" Height="30" Width="60">
+                            <Grid>
+                                <Ellipse x:Name="SwitchKnob" Width="26" Height="26" Fill="White" Margin="2" HorizontalAlignment="Left"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="SwitchBorder" Property="Background" Value="Green"/>
+                                <Setter TargetName="SwitchKnob" Property="HorizontalAlignment" Value="Right"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- TOGGLE BUTTON -->
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Grid.Row="0" HorizontalAlignment="Right">
+            <TextBlock Text="Live Αποστολή στο ΕΡΓΑΝΗ"
+                       Foreground="White"
+                       VerticalAlignment="Center"
+                       FontWeight="SemiBold"
+                       Margin="0,0,10,0"/>
+
+            <ToggleButton x:Name="toggleLiveSubmit"
+                          Width="60"
+                          Height="30"
+                          Style="{StaticResource FancyToggleButtonStyle}"
+                          Checked="ToggleLiveSubmit_Checked"
+                          Unchecked="ToggleLiveSubmit_Unchecked"
+                          ToolTip="Live Αποστολή στο ΕΡΓΑΝΗ"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- ΠΙΝΑΚΑΣ -->
+            <Border Grid.Row="0" Background="White" CornerRadius="10" Padding="10" Margin="0,0,0,15" BorderBrush="#DDD" BorderThickness="1">
+                <DataGrid x:Name="erganiGrid"
+                          Height="300"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True"
+                          SelectionMode="Extended"
+                          SelectionUnit="FullRow"
+                          HeadersVisibility="Column"
+                          GridLinesVisibility="Horizontal"
+                          Background="White"
+                          Foreground="Black"
+                          HorizontalGridLinesBrush="#DDD"
+                          VerticalGridLinesBrush="#DDD">
+                  
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="70">
+                            <DataGridTemplateColumn.Header>
+                                <CheckBox Click="SelectAllCheckBox_Click"/>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
+                        <DataGridTextColumn Header="Α.Φ.Μ." Binding="{Binding AFM}" Width="100" />
+                        <DataGridTextColumn Header="Όνομα Υπαλλήλου" Binding="{Binding FirstName}" Width="*" />
+                        <DataGridTextColumn Header="Επώνυμο Υπαλλήλου" Binding="{Binding LastName}" Width="*" />
+                        <DataGridTextColumn Header="Ημερομηνία Εργασίας" Binding="{Binding Date, StringFormat=dd/MM/yyyy}" Width="140" />
+                        <DataGridTextColumn Header="Ώρα Εισόδου" Binding="{Binding EntryTime}" Width="100" />
+                        <DataGridTextColumn Header="Ώρα Εξόδου" Binding="{Binding ExitTime}" Width="100" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!-- ΦΟΡΜΑ & JSON -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- ΦΟΡΜΑ -->
+                <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="15" Margin="0,0,20,0" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <DatePicker x:Name="dpReferenceDate"
+                                    Margin="0,5,0,10"
+                                    Background="White"
+                                    Foreground="Black"
+                                    materialDesign:HintAssist.Hint="Ημερομηνία Αναφοράς"
+                                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+
+                        <DatePicker x:Name="dpEventDate"
+                                    Margin="0,5,0,10"
+                                    Background="White"
+                                    Foreground="Black"
+                                    materialDesign:HintAssist.Hint="Ημερομηνία Γεγονότος"
+                                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+
+                        <materialDesign:TimePicker x:Name="timeEventPicker"
+                                                   Width="140"
+                                                   Margin="0,5,0,10"
+                                                   Background="White"
+                                                   Foreground="Black"
+                                                   materialDesign:HintAssist.Hint="Ώρα Γεγονότος"
+                                                   Style="{StaticResource MaterialDesignFloatingHintTimePicker}" />
+
+                        <TextBox x:Name="txtReason"
+                                 Height="60"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 Margin="0,5,0,10"
+                                 Background="White"
+                                 Foreground="Black"
+                                 materialDesign:HintAssist.Hint="Αιτιολογία (προαιρετικά)"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Left">
+                            <Button x:Name="btnValidate"
+                                    Content="✅ Έλεγχος Ορθότητας"
+                                    Width="180" Height="40"
+                                    Background="DarkOrange" Foreground="White"
+                                    Click="ValidateData_Click"
+                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+
+                            <Button x:Name="btnSubmitErgani"
+                                    Content="📤 Υποβολή στο ΕΡΓΑΝΗ"
+                                    Width="200" Height="40" Margin="10,0,0,0"
+                                    Background="Gray" Foreground="White"
+                                    IsEnabled="False"
+                                    Click="SubmitToErgani_Click"
+                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+
+                            <Button Content="📜 Ιστορικό Υποβολών"
+                                    Width="200" Height="40" Margin="10,0,0,0"
+                                    Background="SteelBlue" Foreground="White"
+                                    Click="ShowSubmissionHistory_Click"
+                                    Style="{StaticResource MaterialDesignRaisedButton}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- JSON PREVIEW -->
+                <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="15" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel Width="400">
+                        <TextBlock Text="Προεπισκόπηση προς αποστολή" FontWeight="Bold" Foreground="Black" Margin="0,0,0,10"/>
+
+                        <Button Content="👁️ Προεπισκόπηση JSON" Width="250" Height="40"
+                                Background="DarkCyan" Foreground="White"
+                                Click="PreviewJson_Click"
+                                Style="{StaticResource MaterialDesignRaisedButton}" />
+
+                        <TextBox x:Name="txtJsonPreview" Height="100" TextWrapping="Wrap"
+                                 VerticalScrollBarVisibility="Auto"
+                                 FontFamily="Consolas" FontSize="12"
+                                 Background="#F5F5F5" Foreground="Black" Margin="0,10,0,10"/>
+
+                        <Button Content="📋 Αντιγραφή JSON" Width="150" Height="30"
+                                Click="CopyJson_Click"
+                                Background="DarkGray" Foreground="White"
+                                Style="{StaticResource MaterialDesignRaisedButton}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

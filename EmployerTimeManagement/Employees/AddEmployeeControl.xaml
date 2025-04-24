@@ -1,0 +1,153 @@
+﻿<UserControl x:Class="EmployerTimeManagement.AddEmployeeControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             FontFamily="Segoe UI"
+             FontSize="14"
+             Background="#1C1F26">
+
+    <StackPanel Margin="20" Background="#1C1F26">
+
+        <!-- 🟩 Border Προσθήκης -->
+        <Border Background="White"
+                CornerRadius="10"
+                Padding="20"
+                Margin="0 0 0 20"
+                BorderBrush="#DDD"
+                BorderThickness="1">
+            <StackPanel>
+
+                <TextBlock Text="Προσθήκη Υπαλλήλου"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="Black"
+                           Margin="0 0 0 15"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="160"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- ΑΦΜ -->
+                    <TextBox x:Name="txtAFM"
+                             Grid.Column="0"
+                             Height="40"
+                             Background="White"
+                             Foreground="Black"
+                             BorderBrush="#CCC"
+                             Padding="6"
+                             materialDesign:HintAssist.Hint="ΑΦΜ"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             Margin="0,0,10,0"/>
+
+                    <!-- Όνομα -->
+                    <TextBox x:Name="txtFirstName"
+                             Grid.Column="1"
+                             Height="40"
+                             Background="White"
+                             Foreground="Black"
+                             BorderBrush="#CCC"
+                             Padding="6"
+                             materialDesign:HintAssist.Hint="Όνομα"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             Margin="0,0,10,0"/>
+
+                    <!-- Επώνυμο -->
+                    <TextBox x:Name="txtLastName"
+                             Grid.Column="2"
+                             Height="40"
+                             Background="White"
+                             Foreground="Black"
+                             BorderBrush="#CCC"
+                             Padding="6"
+                             materialDesign:HintAssist.Hint="Επώνυμο"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             Margin="0,0,10,0"/>
+
+                    <!-- Κουμπί -->
+                    <Button Grid.Column="3"
+                            Content="➕ Προσθήκη"
+                            Width="140"
+                            Height="40"
+                            Background="#2ECC71"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Click="Save_Click"
+                            Cursor="Hand"
+                            BorderBrush="Transparent"/>
+                </Grid>
+
+            </StackPanel>
+        </Border>
+
+        <!-- 🟦 Πίνακας Υπαλλήλων -->
+        <TextBlock Text="Καταχωρημένοι Υπάλληλοι"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   Foreground="White"
+                   Margin="0 0 0 10"/>
+
+        <DataGrid x:Name="employeeGrid"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  CanUserAddRows="False"
+                  Height="300"
+                  IsReadOnly="True"
+                  Background="White"
+                  Foreground="Black"
+                  AlternatingRowBackground="#FAFAFA"
+                  GridLinesVisibility="Horizontal"
+                  BorderThickness="0"
+                  RowHeight="40"
+                  ColumnHeaderHeight="36"
+                  HorizontalGridLinesBrush="#DDD"
+                  VerticalGridLinesBrush="#DDD">
+
+            <DataGrid.Resources>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Padding" Value="6,4"/>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70"/>
+                <DataGridTextColumn Header="ΑΦΜ" Binding="{Binding AFM}" Width="100"/>
+                <DataGridTextColumn Header="Όνομα" Binding="{Binding FirstName}" Width="120"/>
+                <DataGridTextColumn Header="Επώνυμο" Binding="{Binding LastName}" Width="120"/>
+                <DataGridTextColumn Header="Προστέθηκε" Binding="{Binding CreatedAt, StringFormat={}{0:dd/MM/yyyy}}" Width="150"/>
+
+                <DataGridTemplateColumn Header="Ενέργειες" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="Επεξεργασία"
+                                        Width="80"
+                                        Height="20"
+                                        Click="Edit_Click"
+                                        Foreground="Black"
+                                        Background="#E0E0E0"
+                                        FontSize="12"
+                                        Padding="4,0"
+                                        Margin="0,0,5,0"/>
+                                <Button Content="Διαγραφή"
+                                        Width="80"
+                                        Height="20"
+                                        Click="Delete_Click"
+                                        Foreground="Black"
+                                        Background="#FFCDD2"
+                                        FontSize="12"
+                                        Padding="4,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,121 @@
+﻿<UserControl x:Class="EmployerTimeManagement.Attendance.AttendanceControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             FontFamily="Segoe UI"
+             FontSize="14"
+             Background="#1C1F26">
+
+    <Grid Background="#1C1F26" Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Φόρμα Καταχώρησης -->
+        <Border Background="White"
+                CornerRadius="10"
+                Padding="15"
+                Margin="0,0,0,10"
+                Grid.Row="0"
+                BorderBrush="#DDD"
+                BorderThickness="1">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                <!-- Υπάλληλος -->
+                <StackPanel Margin="0,0,15,0">
+                    <ComboBox x:Name="cmbEmployee"
+                              Width="150"
+                              DisplayMemberPath="FullName"
+                              Background="White"
+                              Foreground="Black"
+                              materialDesign:HintAssist.Hint="Υπάλληλος"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                </StackPanel>
+
+                <!-- Ημερομηνία -->
+                <StackPanel Margin="0,0,15,0">
+                    <DatePicker x:Name="datePicker"
+                                Width="150"
+                                SelectedDate="{Binding SelectedDate}"
+                                Background="White"
+                                Foreground="Black"
+                                materialDesign:HintAssist.Hint="Ημερομηνία"
+                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                </StackPanel>
+
+                <!-- Ώρα Εισόδου -->
+                <StackPanel Margin="0,0,15,0">
+                    <materialDesign:TimePicker x:Name="entryTimePicker"
+                                               Width="130"
+                                               SelectedTime="{Binding EntryTime}"
+                                               Background="White"
+                                               Foreground="Black"
+                                               materialDesign:HintAssist.Hint="Ώρα Εισόδου"
+                                               Style="{StaticResource MaterialDesignFloatingHintTimePicker}" />
+                </StackPanel>
+
+                <!-- Ώρα Εξόδου -->
+                <StackPanel Margin="0,0,15,0">
+                    <materialDesign:TimePicker x:Name="exitTimePicker"
+                                               Width="130"
+                                               SelectedTime="{Binding ExitTime}"
+                                               Background="White"
+                                               Foreground="Black"
+                                               materialDesign:HintAssist.Hint="Ώρα Εξόδου"
+                                               Style="{StaticResource MaterialDesignFloatingHintTimePicker}" />
+                </StackPanel>
+
+                <!-- Καταγραφή -->
+                <Button Content="📥 Καταγραφή"
+                        Click="Save_Click"
+                        Width="140"
+                        Height="40"
+                        Margin="5,0,0,0"
+                        FontWeight="Bold"
+                        Background="#2196F3"
+                        Foreground="White"
+                        Style="{StaticResource MaterialDesignRaisedButton}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Πίνακας Καταχωρίσεων σε ζευγάρια -->
+        <Border Background="White"
+        CornerRadius="10"
+        Padding="15"
+        Grid.Row="1"
+        BorderBrush="#DDD"
+        BorderThickness="1">
+            <DataGrid x:Name="MyDataGrid"
+              AutoGenerateColumns="False"
+              HeadersVisibility="Column"
+              CanUserAddRows="False"
+              IsReadOnly="True"
+              Background="White"
+              Foreground="Black"
+              AlternatingRowBackground="#F5F5F5"
+              GridLinesVisibility="Horizontal"
+              Style="{StaticResource MaterialDesignDataGrid}">
+
+                <!-- ✅ Κεντραρισμένοι και Bold τίτλοι -->
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
+                    <DataGridTextColumn Header="Α.Φ.Μ." Binding="{Binding AFM}" Width="100" />
+                    <DataGridTextColumn Header="Όνομα Υπαλλήλου" Binding="{Binding FirstName}" Width="*" />
+                    <DataGridTextColumn Header="Επώνυμο Υπαλλήλου" Binding="{Binding LastName}" Width="*" />
+                    <DataGridTextColumn Header="Ημερομηνία Εργασίας" Binding="{Binding Date, StringFormat=dd/MM/yyyy}" Width="120" />
+                    <DataGridTextColumn Header="Ώρα Εισόδου" Binding="{Binding EntryTime}" Width="90" />
+                    <DataGridTextColumn Header="Ώρα Εξόδου" Binding="{Binding ExitTime}" Width="90" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+    </Grid>
+</UserControl>
